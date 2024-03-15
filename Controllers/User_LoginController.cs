@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UTIN.DataContext;
 using UTIN.Entities;
@@ -32,7 +33,7 @@ namespace UTIN.Controllers
             }
             return BadRequest(newuser);
         }
-
+        [Authorize]
         [HttpPut("updateuserLoginpassword/{id}")]
         public ActionResult<user_login> updatepassword(int id,user_login data)
         {
