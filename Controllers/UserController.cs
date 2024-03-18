@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using UTIN.DataContext;
 using UTIN.Entities;
 
@@ -17,22 +18,22 @@ namespace UTIN.Controllers
         }
 
         [HttpGet("getUsers")]
-        public ActionResult<List<users>> getUsers()
+        public async Task<ActionResult<List<users>>> getUsers()
         {
-            return _context.Users.ToList();
+            return await _context.Users.ToListAsync();
         }
 
         [HttpPost("addUsers")]
-        public ActionResult<users> addUsers(users newuser)
+        public async Task<ActionResult<users>> addUsers(users newuser)
         {
-           var validate=_context.Users.FirstOrDefault(x=>x.email == newuser.email);
+           var validate=await _context.Users.FirstOrDefaultAsync(x=>x.email == newuser.email);
            if(validate == null)
             {
                 if (newuser != null)
                 {
                     newuser.role = "user";
                     _context.Users.Add(newuser);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     return Ok(newuser);
                 }
                 return NotFound("invalid");
@@ -42,17 +43,17 @@ namespace UTIN.Controllers
         }
         [Authorize]
         [HttpPut("updatepassword/{id}")]
-        public ActionResult<users> updatepassword(int id, users data)
+        public async Task<ActionResult<users>> updatepassword(int id, users data)
         {
             if(data != null)
             {
-                var user = _context.Users.Find(id);
+                var user = await _context.Users.FindAsync(id);
                 if(user == null)
                 {
                     return BadRequest();
                 }
                 user.password= data.password;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return Ok(user);
             }
             return BadRequest();

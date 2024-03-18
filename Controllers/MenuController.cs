@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using UTIN.DataContext;
 using UTIN.Entities;
 
@@ -18,40 +19,40 @@ namespace UTIN.Controllers
         }
 
         [HttpGet("getmenu")]
-        public ActionResult<List<menu>> getmenu()
+        public async Task<ActionResult<List<menu>>> getmenu()
         {
-            return _context.Menu.ToList();
+            return await _context.Menu.ToListAsync();
         }
 
         [HttpDelete("deletebyid/{id}")]
-        public ActionResult<menu> delelebyid(int id)
+        public async Task<ActionResult<menu>> delelebyid(int id)
         {
-            var menu = _context.Menu.Find(id);
+            var menu = await _context.Menu.FindAsync(id);
             if (menu == null)
             {
                 return NotFound("menu not found.");
             }
             _context.Menu.Remove(menu);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok(menu);
         }
 
         [HttpPost("addmenu")]
-        public ActionResult<menu> addmenu(menu newMenu)
+        public async Task<ActionResult<menu>> addmenu(menu newMenu)
         {
             if(newMenu == null)
             {
                 return BadRequest(newMenu);
             }
             _context.Menu.Add(newMenu);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok(newMenu);
         }
 
         [HttpPut("updateMenu/{id}")]
-        public ActionResult<menu> updateMenu(int id, menu newMenu)
+        public async Task<ActionResult<menu>> updateMenu(int id, menu newMenu)
         {
-            var menu=_context.Menu.Find(id);
+            var menu=await _context.Menu.FindAsync(id);
             if(menu == null)
             {
                 return BadRequest(newMenu);
@@ -59,7 +60,7 @@ namespace UTIN.Controllers
             menu.title = newMenu.title;
             menu.price = newMenu.price;
             menu.image = newMenu.image;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok(menu);
         }
     }

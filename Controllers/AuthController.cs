@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -23,9 +24,9 @@ namespace UTIN.Controllers
         }
 
         [HttpPost("login")]
-        public ActionResult<user_login> login(user_login data)
+        public async Task<ActionResult<user_login>> login(user_login data)
         {
-            var user = _context.User_login.FirstOrDefault(x => x.email == data.email);
+            var user = await _context.User_login.FirstOrDefaultAsync(x => x.email == data.email);
             if (user == null)
             {
                 return BadRequest("User not found.");

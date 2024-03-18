@@ -21,17 +21,17 @@ namespace UTIN.Controllers
         }
 
         [HttpGet("getOrders")]
-        public ActionResult<List<orders>> getOrders()
+        public async Task<ActionResult<List<orders>>> getOrders()
         {
-            return _context.Orders.Include(o=>o.details).ThenInclude(d=>d.address).ToList();
+            return await _context.Orders.Include(o=>o.details).ThenInclude(d=>d.address).ToListAsync();
         }
 
         [HttpPut("updateStatus/{id}")]
-        public ActionResult<orders> updateStatus(int id, orders neworder)
+        public async Task<ActionResult<orders>> updateStatus(int id, orders neworder)
         {
             try
             {
-                var order = _context.Orders.Include(o => o.details).FirstOrDefault(o => o.id == id);
+                var order = await _context.Orders.Include(o => o.details).FirstOrDefaultAsync(o => o.id == id);
 
                 if (order == null)
                 {
@@ -49,7 +49,7 @@ namespace UTIN.Controllers
                     {
                         order.time = neworder.time;
                     }
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     return Ok(order);
                 }
                 return BadRequest("Order detail not found.");
@@ -62,14 +62,14 @@ namespace UTIN.Controllers
         }
 
         [HttpPost("addOrder")]
-        public ActionResult<orders> addOrder(orders order)
+        public async Task<ActionResult<orders>> addOrder(orders order)
         {
             if(order == null)
             {
                 return NotFound("data not found.");
             }
             _context.Orders.Add(order);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok(order);
         }
     }
