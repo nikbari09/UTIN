@@ -13,5 +13,6 @@ namespace UTIN.DataContext
         public DbSet<orders> Orders { get; set; }
         public DbSet<offers> Offers { get; set; }
         public DbSet<admin_login> admin_Login { get; set; }
+        public DbSet<offercount> OfferCount { get; set; }   
     }
 }
