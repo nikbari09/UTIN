@@ -23,6 +23,9 @@
         public String time { set; get; }
         public String firstname { get; set; }
         public String lastname { get; set; }
+        public String payment_mode { get; set; } 
+        public String transaction_id { get; set; }
+
     }
 
     public class Address
