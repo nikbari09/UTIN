@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using UTIN;
 using UTIN.DataContext;
 
 var builder = WebApplication.CreateBuilder(args);
